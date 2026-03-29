@@ -59,7 +59,7 @@ Our code is built based on [Janus](https://github.com/deepseek-ai/Janus) and [Mi
 
 We release our pretrained model's parameters on [hugging face](https://huggingface.co/) as follows:
 
-- [Robotic Large-Scale Pretrained Checkpoint for Action Expert](https://huggingface.co/miniFranka/LaST0_Pretrain_AE_chunk8)
+- Robotic Large-Scale Pretrained Checkpoint for Action Expert: [Action Chunk = 8](https://huggingface.co/miniFranka/LaST0_Pretrain_AE_chunk8), [Action Chunk = 16](https://huggingface.co/miniFranka/LaST0_Pretrain_AE_chunk16)
 - LIBERO SFT Checkpoints: [LIBERO Spatial](https://huggingface.co/miniFranka/LaST0_SFT_LIBERO_spatial), [LIBERO Object](https://huggingface.co/miniFranka/LaST0_SFT_LIBERO_object), [LIBERO Goal](https://huggingface.co/miniFranka/LaST0_SFT_LIBERO_goal), [LIBERO 10](https://huggingface.co/miniFranka/LaST0_SFT_LIBERO_10)
 - [RLBench SFT Checkpoint](https://huggingface.co/miniFranka/LaST0_SFT_RLBench)
 
