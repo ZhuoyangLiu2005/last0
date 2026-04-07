@@ -5,7 +5,7 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
 
-[🌐**Project Page**](https://vla-last0.github.io/) | [✍️**Paper(Arxiv)**](https://arxiv.org/abs/2601.05248v2) | [🎥**Demo**](https://vla-last0.github.io/)
+[🌐**Project Page**](https://vla-last0.github.io/) | [✍️**Paper(Arxiv)**](https://arxiv.org/abs/2601.05248) | [🎥**Demo**](https://vla-last0.github.io/)
 
 Zhuoyang Liu, Jiaming Liu, Hao Chen, Jiale Yu, Ziyu Guo, Chengkai Hou, Chenyang Gu, Xiangju Mi, Renrui Zhang, Kun Wu, Zhengping Che, Jian Tang, Pheng-Ann Heng, Shanghang Zhang
 
