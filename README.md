@@ -16,6 +16,7 @@ Zhuoyang Liu, Jiaming Liu, Hao Chen, Jiale Yu, Ziyu Guo, Chengkai Hou, Chenyang 
 
 ## ✨ News ✨
 
+- [2026/04/30] LaST​<sub>0</sub> is accepted by ICML 2026(spotlight, top 2.2%)! 🎉
 - [2026/03/05] The code of LaST​<sub>0</sub> is released! Including training and evaluating on various benchmarks. We also release our pretrained and finetuned checkpoints! The real-world scripts is comming soon! 🚀
 - [2026/02/02] A new version of LaST<sub>0</sub> has been updated on arXiv, with more real-world experiments added, including tabletop manipulation, mobile manipulation, and dexterous hand manipulation! 🚀
 - [2026/01/08] LaST​<sub>0</sub> is now live on arXiv! The code is also comming soon. 🚀
