@@ -101,7 +101,12 @@ def model_load(args):
     return vl_gpt, vl_chat_processor, action_tokenizer, statistic
 
 def model_predict_mask_once_kvcache(args, vl_gpt, vl_chat_processor, action_tokenizer, statistic, task_description, fast_image, slow_image, state, pointcloud):
-    device = f'cuda:{args.cuda}'
+    if torch.xpu.is_available():
+        device = f'xpu:{args.cuda}'
+    elif torch.cuda.is_available():
+        device = f'cuda:{args.cuda}'
+    else:
+        device = 'cpu'
     vl_gpt = vl_gpt.to(device).eval()
     parallel_size = 1
     fast_img_len = 1
