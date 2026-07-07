@@ -395,9 +395,9 @@ class PCViews:
             ]
         )
 
-        angle = torch.tensor(_views[:, 0, :]).float().cuda()
+        angle = torch.tensor(_views[:, 0, :]).float()
         self.rot_mat = euler2mat(angle).transpose(1, 2)
-        self.translation = torch.tensor(_views[:, 1, :]).float().cuda()
+        self.translation = torch.tensor(_views[:, 1, :]).float()
         self.translation = self.translation.unsqueeze(1)
 
     def get_pos(self, points, args):

@@ -36,7 +36,12 @@ from prismatic.vla.datasets.rlds.utils.data_utils import NormalizationType
 # Initialize important constants
 DATE = time.strftime("%Y_%m_%d")
 DATE_TIME = time.strftime("%Y_%m_%d-%H_%M_%S")
-DEVICE = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
+if torch.xpu.is_available():
+    DEVICE = torch.device("xpu:0")
+elif torch.cuda.is_available():
+    DEVICE = torch.device("cuda:0")
+else:
+    DEVICE = torch.device("cpu")
 OPENVLA_IMAGE_SIZE = 224  # Standard image size expected by OpenVLA
 
 # Configure NumPy print settings

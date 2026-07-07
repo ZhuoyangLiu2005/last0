@@ -465,7 +465,7 @@ def train(args: argparse.Namespace) -> None:
     )
     model, optimizer, train_dataloader = accelerator.prepare(model, optimizer, train_dataloader)
 
-    metric = TrainingMetrics(device=torch.cuda.current_device())
+    metric = TrainingMetrics(device=accelerator.device)
     model.train()
     global_step = 0
 
