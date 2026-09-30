@@ -5,6 +5,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+if torch.xpu.is_available():
+    _AMP_DEVICE_TYPE = "xpu"
+elif torch.cuda.is_available():
+    _AMP_DEVICE_TYPE = "cuda"
+else:
+    _AMP_DEVICE_TYPE = "cpu"
+
 
 def three_nearest_neighbors(unknown: torch.Tensor, known: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
     """
@@ -104,7 +111,7 @@ def three_interpolate_backward(
 
 class ThreeInterpolate(Function):
     @staticmethod
-    @torch.cuda.amp.custom_fwd(cast_inputs=torch.float32)
+    @torch.amp.custom_fwd(device_type=_AMP_DEVICE_TYPE, cast_inputs=torch.float32)
     def forward(ctx, features, idx, weight):
         output = three_interpolate_forward(features, idx, weight)  # 使用上述实现
         ctx.save_for_backward(idx, weight)
@@ -112,7 +119,7 @@ class ThreeInterpolate(Function):
         return output
 
     @staticmethod
-    @torch.cuda.amp.custom_bwd
+    @torch.amp.custom_bwd(device_type=_AMP_DEVICE_TYPE)
     def backward(ctx, grad_out):
         idx, weight = ctx.saved_tensors
         grad_features = three_interpolate_backward(grad_out, idx, weight, ctx.m)  # 选择纯PyTorch或torch_scatter版本

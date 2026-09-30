@@ -5,6 +5,14 @@ import torch
 from scipy.spatial.transform import Rotation
 
 
+def _default_device():
+    if torch.xpu.is_available():
+        return torch.device("xpu")
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    return torch.device("cpu")
+
+
 class BasePose(object):
     @staticmethod
     def pose_delta_2d(pose1_2d, pose2_2d):
@@ -271,8 +279,9 @@ class PointCloud(object):
             point_cloud = point_cloud[sampled_indices]
         elif method == "fps":
             # fast point cloud sampling using torch3d
-            point_cloud = torch.from_numpy(point_cloud).unsqueeze(0).cuda()
-            num_points = torch.tensor([num_points]).cuda()
+            device = _default_device()
+            point_cloud = torch.from_numpy(point_cloud).unsqueeze(0).to(device)
+            num_points = torch.tensor([num_points]).to(device)
             # remember to only use coord to sample
             _, sampled_indices = torch3d_ops.sample_farthest_points(
                 points=point_cloud[..., :3], K=num_points

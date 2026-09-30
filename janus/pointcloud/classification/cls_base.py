@@ -9,6 +9,15 @@ from loss import build_criterion_from_cfg
 from utils import load_checkpoint
 import ipdb
 
+
+def _default_device():
+    if torch.xpu.is_available():
+        return torch.device("xpu")
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    return torch.device("cpu")
+
+
 @MODELS.register_module()
 class BaseCls(nn.Module):
     def __init__(self,
@@ -52,7 +61,7 @@ class DistillCls(BaseCls):
         in_channels = self.encoder.distill_channels
         distill_args.distill_head_args.in_channels = in_channels
         self.dist_head = build_model_from_cfg(distill_args.distill_head_args)
-        self.dist_model = build_model_from_cfg(distill_args).cuda()
+        self.dist_model = build_model_from_cfg(distill_args).to(_default_device())
         load_checkpoint(self.dist_model, distill_args.pretrained_path)
         self.dist_model.eval()
 

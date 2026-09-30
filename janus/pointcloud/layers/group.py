@@ -9,6 +9,13 @@ import torch.nn as nn
 from torch.autograd import Function
 # from cpp import pointnet2_cuda
 
+if torch.xpu.is_available():
+    _AMP_DEVICE_TYPE = "xpu"
+elif torch.cuda.is_available():
+    _AMP_DEVICE_TYPE = "cuda"
+else:
+    _AMP_DEVICE_TYPE = "cpu"
+
 class KNN(nn.Module):
     def __init__(self, neighbors, transpose_mode=True):
         super(KNN, self).__init__()
@@ -75,7 +82,7 @@ class DilatedKNN(nn.Module):
 
 class GroupingOperation(Function):
     @staticmethod
-    @torch.cuda.amp.custom_fwd(cast_inputs=torch.float32)
+    @torch.amp.custom_fwd(device_type=_AMP_DEVICE_TYPE, cast_inputs=torch.float32)
     def forward(ctx, features: torch.Tensor, idx: torch.Tensor) -> torch.Tensor:
         """
         Pure PyTorch implementation of grouping operation

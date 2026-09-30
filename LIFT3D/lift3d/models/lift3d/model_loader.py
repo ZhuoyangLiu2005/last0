@@ -48,12 +48,17 @@ def test_model_forward(model, logdir=None):
     1. Test the model by performing a forward pass with random point cloud data.
     2. Log the trainable and frozen parameters to files if `logdir` is provided.
     """
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.xpu.is_available():
+        device = torch.device("xpu")
+    elif torch.cuda.is_available():
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
     model = model.to(device)
     model = model.float()
     pts = torch.randn([4, 1024, 3]).to(device)
     pts = pts.to(device)
-    with torch.amp.autocast(device_type="cuda"):
+    with torch.amp.autocast(device_type=device.type):
         embedding_dim = model(pts).shape[1]
     if logdir:
         os.makedirs(logdir, exist_ok=True)

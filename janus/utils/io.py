@@ -29,14 +29,23 @@ from transformers import AutoModelForCausalLM
 from janus.models import MultiModalityCausalLM, VLChatProcessor
 
 
-def load_pretrained_model(model_path: str):
+def load_pretrained_model(model_path: str, device: str = None):
     vl_chat_processor: VLChatProcessor = VLChatProcessor.from_pretrained(model_path)
     tokenizer = vl_chat_processor.tokenizer
 
     vl_gpt: MultiModalityCausalLM = AutoModelForCausalLM.from_pretrained(
         model_path, trust_remote_code=True
     )
-    vl_gpt = vl_gpt.to(torch.bfloat16).cuda().eval()
+
+    if device is None:
+        if torch.xpu.is_available():
+            device = "xpu"
+        elif torch.cuda.is_available():
+            device = "cuda"
+        else:
+            device = "cpu"
+
+    vl_gpt = vl_gpt.to(torch.bfloat16).to(device).eval()
 
     return tokenizer, vl_chat_processor, vl_gpt
 

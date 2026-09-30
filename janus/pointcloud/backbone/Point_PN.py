@@ -301,7 +301,6 @@ class EncP(nn.Module):
         lc_xyz, lc_x, knn_xyz, knn_x, center_idx, neighbor_idx = 0,0,0,0,0,0
         return xyz, x , center_idx, neighbor_idx, lc_xyz
 
-from torch.cuda.amp import autocast
 # above is stage2 version
 class Point_PN_scan(nn.Module):
     def __init__(self, in_channels=3, class_num=15, input_points=1024, num_stages=2, embed_dim=96, k_neighbors=81, beta=100, alpha=1000, LGA_block=[2,1,1,1], dim_expansion=[2,2,2,1], type='scan'):

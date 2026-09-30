@@ -9,11 +9,29 @@ import numpy as np
 import torch
 from PIL import Image
 
+def _default_device():
+    if torch.xpu.is_available():
+        return torch.device("xpu:0")
+    if torch.cuda.is_available():
+        return torch.device("cuda:0")
+    return torch.device("cpu")
+
+
+def resolve_device_str(index) -> str:
+    """Resolve a device index (e.g. cfg.cuda = "0") to a backend-qualified
+    device string, preferring XPU, then CUDA, then CPU."""
+    if torch.xpu.is_available():
+        return f"xpu:{index}"
+    if torch.cuda.is_available():
+        return f"cuda:{index}"
+    return "cpu"
+
+
 # Initialize important constants
 ACTION_DIM = 7
 DATE = time.strftime("%Y_%m_%d")
 DATE_TIME = time.strftime("%Y_%m_%d-%H_%M_%S")
-DEVICE = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
+DEVICE = _default_device()
 
 # Configure NumPy print settings
 np.set_printoptions(formatter={"float": lambda x: "{0:0.3f}".format(x)})
@@ -50,11 +68,14 @@ def set_seed_everywhere(seed: int) -> None:
         seed: The random seed to use
     """
     torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
+    if torch.xpu.is_available():
+        torch.xpu.manual_seed_all(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
     np.random.seed(seed)
     random.seed(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
     os.environ["PYTHONHASHSEED"] = str(seed)
 
 
@@ -70,7 +91,7 @@ def get_action(
     state=None,
 ) -> Union[List[np.ndarray], np.ndarray]:
 
-    device = f'cuda:{cfg.cuda}'
+    device = resolve_device_str(cfg.cuda)
     vl_gpt = vl_gpt.to(device).eval()
     parallel_size= 1
     fast_img_len = 1

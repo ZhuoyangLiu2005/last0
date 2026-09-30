@@ -78,6 +78,30 @@ cd scripts
 bash test_rlbench.sh
 ```
 
+## ⚡ Running Inference on Intel XPU
+
+LaST​<sub>0</sub>​ inference also runs on Intel XPU (integrated and discrete GPUs) through PyTorch's native XPU backend — no code changes needed, device selection is automatic and prefers XPU whenever it is available.
+
+```bash
+# Install PyTorch with XPU support instead of the CUDA build shown above
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/xpu
+pip install -r requirements.txt
+
+# flash-attn and pytorch3d are CUDA-only extras; skip them for XPU
+# inference falls back to torch.nn.functional.scaled_dot_product_attention
+```
+
+Then run the same evaluation scripts as above — the `--cuda` device index is resolved to `xpu:N` automatically when an Intel GPU is detected:
+
+```bash
+# LIBERO
+bash experiments/test_libero.sh
+
+# RLBench
+cd scripts
+bash test_rlbench.sh
+```
+
 ## 💾 Data Construction
 
 We provide the processed LIBERO data in `.npy` format on [libero data](https://huggingface.co/datasets/miniFranka/libero_npy).
